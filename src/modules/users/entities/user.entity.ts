@@ -1,5 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "../enums/user-role.enum";
+import { Payments } from "src/modules/payments/entities/payments.entity";
+import { Orders } from "src/modules/orders/entity/orders.entity";
 
 @Entity()
 export class User{
@@ -12,7 +14,7 @@ export class User{
     @Column()
     lastName: string;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
 
     @Column()
@@ -24,6 +26,12 @@ export class User{
         default: Role.BUYER
       })
     role: Role
+
+    @OneToMany(()=> Payments, (payment)=>payment.user)
+    payments: Payments[];
+
+    @OneToMany(()=> Orders, (orders)=>orders.user)
+    orders: Orders[];
 
     @CreateDateColumn ()
     created_at: Date

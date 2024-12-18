@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Orders } from "src/modules/orders/entity/orders.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Discounts{
@@ -28,4 +29,7 @@ export class Discounts{
 
     @Column()
     current_usage: number;
+    
+    @OneToMany(()=> Orders, (orders)=> orders.discount)
+    orders: Orders[];
 }

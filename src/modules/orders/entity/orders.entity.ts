@@ -3,17 +3,18 @@ import { User } from "src/modules/users/entities/user.entity";
 import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderStatus } from "../enums/order-status.enum";
 import { OrderItem } from "./order-item.entity";
+import { Payments } from "src/modules/payments/entities/payments.entity";
 
 @Entity()
 export class Orders{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(()=> User, (user)=>user.id)
-    user_id: User;
+    @ManyToOne(()=> User, (user)=>user.orders)
+    user: User;
 
-    @OneToOne(()=> Discounts, (discounts)=>discounts.id)
-    discount_id: Discounts;
+    @ManyToOne(()=> Discounts, (discounts)=>discounts.orders)
+    discount: Discounts;
 
     @Column()
     order_date: Date;
@@ -24,11 +25,19 @@ export class Orders{
     @Column()
     discount_amount: number;
 
-    @Column()
+    
+        @Column({
+            type: 'enum',
+            enum: OrderStatus,
+            default: OrderStatus.PENDING
+          })
     status: OrderStatus;
 
     @Column()
     shipping_address: string;
+
+    @OneToOne(()=>Payments, (payment)=> payment.order)
+    payment: Payments;
 
     @OneToMany(()=>OrderItem, (orderItem)=> orderItem.product_id)
     order_items: OrderItem[];
