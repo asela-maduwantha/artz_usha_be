@@ -1,0 +1,3 @@
+export enum OrderStatus{
+    PENDING,CONFIRMED, DELIVERED, CANCELLED
+}
