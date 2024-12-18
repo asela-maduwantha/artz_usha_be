@@ -17,7 +17,7 @@ import {
   import { Discounts } from './entity/discounts.entity';
   import { CreateDiscountDto } from './dto/create-discount.dto';
   
-  @ApiTags('discounts')
+  @ApiTags('Discounts')
   @Controller('discounts')
   export class DiscountsController {
     constructor(private readonly discountsService: DiscountsService) {}

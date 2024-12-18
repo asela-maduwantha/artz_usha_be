@@ -6,7 +6,7 @@ export const setupSwagger = (app: INestApplication) => {
     .setTitle('ArtzByUsha E-Commerce API')
     .setDescription('Comprehensive API documentation for Handcrafts E-Commerce Platform')
     .setVersion('1.0')
-    .addTag('Auth', 'Authentication and User Management')
+    .addTag('Authentication', 'Authentication and User Management')
     .addTag('Products', 'Product Catalog and Management')
     .addTag('Orders', 'Order Processing and Tracking')
     .addTag('Discounts', 'Discount and Promotion Management')
@@ -20,7 +20,7 @@ export const setupSwagger = (app: INestApplication) => {
         description: 'Enter JWT Token',
         in: 'header',
       },
-      'JWT-auth' // This name is used to apply the authentication to specific endpoints
+      'JWT-auth' 
     )
     .build();
 
