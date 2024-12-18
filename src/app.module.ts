@@ -9,6 +9,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { DiscountsModule } from './modules/discounts/discounts.module';
 import { ProductsModule } from './modules/products/products.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ProductsModule } from './modules/products/products.module';
     NotificationsModule,
     DiscountsModule,
     ProductsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

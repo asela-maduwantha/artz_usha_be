@@ -1,4 +1,4 @@
-const enum Role{
-    USER,
-    BUYER
+ export enum Role{
+   ADMIN = 'ADMIN',
+  BUYER = 'BUYER'
 }
