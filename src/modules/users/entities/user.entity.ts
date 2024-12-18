@@ -22,5 +22,4 @@ export class User{
 
     @CreateDateColumn ()
     created_at: Date
-
 }

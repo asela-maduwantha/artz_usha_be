@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import { ProductFeature } from 'src/modules/products/entities/product-feature.entity';
 import { Product } from 'src/modules/products/entities/product.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 
@@ -9,6 +10,11 @@ export default registerAs('database', () => ({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities:[User, Product],
+  entities:[
+    User, 
+    Product,
+    ProductFeature,
+
+  ],
   synchronize: true,
 }));

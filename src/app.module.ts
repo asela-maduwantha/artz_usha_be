@@ -24,7 +24,7 @@ import { ProductsModule } from './modules/products/products.module';
     NotificationsModule,
     LoyaltyModule,
     DiscountsModule,
-    ProductsModule
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
