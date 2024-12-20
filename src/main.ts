@@ -13,8 +13,7 @@ async function bootstrap() {
   setupSwagger(app);
   app.enableCors();
   
-  // Use environment variable PORT or fallback to 8080
-  const port = process.env.PORT || 8080;
+  const port = process.env.PORT || 3000;
   await app.listen(port);
 }
 bootstrap();
