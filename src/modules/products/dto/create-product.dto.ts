@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber, IsBoolean, IsArray, ValidateNested, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateCustomizationOptionDto } from './create-customization-option.dto';
 
 export class CreateProductFeatureDto {
   @ApiProperty({ description: 'Feature tag' })
@@ -54,4 +55,14 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => CreateProductFeatureDto)
   features?: CreateProductFeatureDto[];
+
+   @ApiProperty({ 
+        description: 'Customization options', 
+        type: [CreateCustomizationOptionDto],
+        required: false 
+    })
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => CreateCustomizationOptionDto)
+    customization_options?: CreateCustomizationOptionDto[];
 }
