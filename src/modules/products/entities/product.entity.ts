@@ -1,12 +1,12 @@
+// src/modules/products/entities/product.entity.ts
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductFeature } from "./product-feature.entity";
-import { features } from "process";
-
+import { CustomizationOption } from "./customization-option.entity";
 
 @Entity()
-export class Product{
+export class Product {
     @PrimaryGeneratedColumn()
-    id : number;
+    id: number;
 
     @Column()
     name: string;
@@ -29,7 +29,9 @@ export class Product{
     @Column()
     is_active: boolean;
 
-    @OneToMany(()=> ProductFeature, (feature)=>feature.product)
+    @OneToMany(() => ProductFeature, (feature) => feature.product)
     features: ProductFeature[];
-    
+
+    @OneToMany(() => CustomizationOption, (option) => option.product)
+    customization_options: CustomizationOption[];
 }
