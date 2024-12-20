@@ -19,6 +19,7 @@ import { Discounts } from '../discounts/entity/discounts.entity';
     ])
   ],
   controllers: [OrdersController],
-  providers: [OrdersService]
+  providers: [OrdersService],
+  exports: [OrdersService]
 })
 export class OrdersModule {}

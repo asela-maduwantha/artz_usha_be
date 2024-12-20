@@ -46,8 +46,8 @@ export class OrdersService {
 
     // Create order
     const order = this.ordersRepository.create({
-      user_id: user,
-      discount_id: discount,
+      user: user,
+      discount: discount,
       order_date: createOrderDto.order_date,
       total_amount: createOrderDto.total_amount,
       discount_amount: createOrderDto.discount_amount || 0,
@@ -117,7 +117,7 @@ export class OrdersService {
 
   async findByUser(userId: number): Promise<Orders[]> {
     return this.ordersRepository.find({ 
-      where: { user_id: { id: userId } },
+      where: { user: { id: userId } },
       relations: ['user_id', 'discount_id', 'order_items', 'order_items.product_id']
     });
   }
