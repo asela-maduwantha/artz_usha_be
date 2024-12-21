@@ -11,7 +11,7 @@ export class CustomizationOption {
     name: string;
 
     @Column()
-    type: string; // e.g., 'color', 'size', 'material', 'text'
+    type: string; 
 
     @Column('simple-array', { nullable: true })
     available_values: string[];

@@ -10,6 +10,8 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { DiscountsModule } from './modules/discounts/discounts.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CartModule } from './modules/cart/cart.module';
+import { WishlistModule } from './modules/wishlist/wishlist.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AuthModule } from './modules/auth/auth.module';
     DiscountsModule,
     ProductsModule,
     AuthModule,
+    CartModule,
+    WishlistModule,
   ],
   controllers: [AppController],
   providers: [AppService],

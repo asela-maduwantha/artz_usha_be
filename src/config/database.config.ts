@@ -1,4 +1,6 @@
 import { registerAs } from '@nestjs/config';
+import { CartItem } from 'src/modules/cart/entities/cart-item.entity';
+import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Discounts } from 'src/modules/discounts/entity/discounts.entity';
 import { OrderItemCustomization } from 'src/modules/orders/entity/order-item-customization.entity';
 import { OrderItem } from 'src/modules/orders/entity/order-item.entity';
@@ -8,6 +10,8 @@ import { CustomizationOption } from 'src/modules/products/entities/customization
 import { ProductFeature } from 'src/modules/products/entities/product-feature.entity';
 import { Product } from 'src/modules/products/entities/product.entity';
 import { User } from 'src/modules/users/entities/user.entity';
+import { WishlistItem } from 'src/modules/wishlist/entities/wishlist-item.entity';
+import { Wishlist } from 'src/modules/wishlist/entities/wishlist.entity';
 
 export default registerAs('database', () => ({
   type: 'mysql',
@@ -25,7 +29,11 @@ export default registerAs('database', () => ({
     OrderItem,
     Discounts,
     Payments,
-    OrderItemCustomization
+    OrderItemCustomization,
+    Wishlist,
+    WishlistItem,
+    Cart,
+    CartItem
   ],
   synchronize: true,
 }));
