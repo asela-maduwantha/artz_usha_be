@@ -1,14 +1,30 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsPositive } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsPositive, ValidateNested } from 'class-validator';
+import { OrderItemCustomizationDto } from './order-item-customization.dto';
 
 export class CreateOrderItemDto {
-  @ApiProperty({ description: 'Product ID', example: 1 })
+  @ApiProperty({
+    description: 'ID of the product to be ordered',
+    example: 123
+  })
   @IsNumber()
-  @IsPositive()
   product_id: number;
 
-  @ApiProperty({ description: 'Quantity of the product', example: 2 })
+  @ApiProperty({
+    description: 'Quantity of the product',
+    example: 2
+  })
   @IsNumber()
   @IsPositive()
   quantity: number;
+
+  @ApiProperty({
+    description: 'List of customizations for the product',
+    type: [OrderItemCustomizationDto]
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OrderItemCustomizationDto)
+  customizations: OrderItemCustomizationDto[];
 }

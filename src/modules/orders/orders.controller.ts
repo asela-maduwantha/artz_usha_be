@@ -25,14 +25,14 @@ import {
     constructor(private readonly ordersService: OrdersService) {}
   
     @Post()
-    @ApiOperation({ summary: 'Create a new order' })
-    @ApiResponse({ 
-      status: 201, 
-      description: 'The order has been successfully created',
-      type: Orders 
+    @ApiOperation({ summary: 'Create a new order with customizations' })
+    @ApiResponse({
+        status: 201,
+        description: 'The order has been successfully created with customizations',
+        type: Orders
     })
     async create(@Body() createOrderDto: CreateOrderDto): Promise<Orders> {
-      return this.ordersService.create(createOrderDto);
+        return this.ordersService.create(createOrderDto);
     }
   
     @Get()

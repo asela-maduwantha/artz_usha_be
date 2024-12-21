@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { Discounts } from 'src/modules/discounts/entity/discounts.entity';
+import { OrderItemCustomization } from 'src/modules/orders/entity/order-item-customization.entity';
 import { OrderItem } from 'src/modules/orders/entity/order-item.entity';
 import { Orders } from 'src/modules/orders/entity/orders.entity';
 import { Payments } from 'src/modules/payments/entities/payments.entity';
@@ -23,7 +24,8 @@ export default registerAs('database', () => ({
     Orders,
     OrderItem,
     Discounts,
-    Payments
+    Payments,
+    OrderItemCustomization
   ],
   synchronize: true,
 }));
