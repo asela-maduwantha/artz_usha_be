@@ -1,3 +1,4 @@
+// cart.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -68,17 +69,15 @@ export class CartService {
       throw new NotFoundException('Cart item not found');
     }
 
-    const updateData: Partial<CartItem> = {};
-
-    if (typeof updateCartItemDto.quantity !== 'undefined') {
-      updateData.quantity = updateCartItemDto.quantity;
+    if (updateCartItemDto.quantity) {
+      cartItem.quantity = updateCartItemDto.quantity;
     }
 
     if (updateCartItemDto.customization_data) {
-      updateData.customization_data = updateCartItemDto.customization_data;
+      cartItem.customization_data = updateCartItemDto.customization_data;
     }
 
-    await this.cartItemRepository.update(itemId, updateData);
+    await this.cartItemRepository.save(cartItem);
     return this.getOrCreateCart(userId);
   }
 
