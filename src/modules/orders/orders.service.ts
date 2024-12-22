@@ -126,7 +126,6 @@ export class OrdersService {
                 'order_items',
                 'order_items.product',
                 'order_items.customizations',
-                'order_items.customizations.customization_option'
             ]
         });
     }
@@ -140,7 +139,6 @@ export class OrdersService {
                 'order_items',
                 'order_items.product',
                 'order_items.customizations',
-                'order_items.customizations.customization_option'
             ]
         });
 
