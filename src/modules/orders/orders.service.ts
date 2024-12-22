@@ -78,7 +78,7 @@ export class OrdersService {
             // Create order item
             const orderItem = this.orderItemRepository.create({
                 order_id: savedOrder,
-                product_id: product,
+                product: product,
                 quantity: itemDto.quantity
             });
             const savedOrderItem = await this.orderItemRepository.save(orderItem);
@@ -121,35 +121,51 @@ export class OrdersService {
     async findAll(): Promise<Orders[]> {
         return this.ordersRepository.find({
             relations: [
-                'user_id',
-                'discount_id',
+                'user',
+                'discount',
                 'order_items',
-                'order_items.product_id',
+                'order_items.product',
                 'order_items.customizations',
                 'order_items.customizations.customization_option'
             ]
         });
     }
-
+    
     async findById(id: number): Promise<Orders> {
         const order = await this.ordersRepository.findOne({ 
             where: { id },
             relations: [
-                'user_id',
-                'discount_id',
+                'user',
+                'discount',
                 'order_items',
-                'order_items.product_id',
+                'order_items.product',
                 'order_items.customizations',
                 'order_items.customizations.customization_option'
             ]
         });
 
+    
         if (!order) {
             throw new NotFoundException(`Order with ID ${id} not found`);
         }
-
+    
         return order;
     }
+    
+    async findByUser(userId: number): Promise<Orders[]> {
+        return this.ordersRepository.find({ 
+            where: { user: { id: userId } },
+            relations: ['user', 'discount', 'order_items', 'order_items.product']
+        });
+    }
+    
+    async findByStatus(status: OrderStatus): Promise<Orders[]> {
+        return this.ordersRepository.find({ 
+            where: { status },
+            relations: ['user', 'discount', 'order_items', 'order_items.product']
+        });
+    }
+
   async updateStatus(id: number, status: OrderStatus): Promise<Orders> {
     const order = await this.findById(id);
     order.status = status;
@@ -163,17 +179,5 @@ export class OrdersService {
     }
   }
 
-  async findByUser(userId: number): Promise<Orders[]> {
-    return this.ordersRepository.find({ 
-      where: { user: { id: userId } },
-      relations: ['user_id', 'discount_id', 'order_items', 'order_items.product_id']
-    });
-  }
-
-  async findByStatus(status: OrderStatus): Promise<Orders[]> {
-    return this.ordersRepository.find({ 
-      where: { status },
-      relations: ['user_id', 'discount_id', 'order_items', 'order_items.product_id']
-    });
-  }
+  
 }

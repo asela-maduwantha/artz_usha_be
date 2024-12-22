@@ -68,11 +68,17 @@ export class CartService {
       throw new NotFoundException('Cart item not found');
     }
 
-    await this.cartItemRepository.update(itemId, {
-      quantity: updateCartItemDto.quantity,
-      customization_data: updateCartItemDto.customization_data,
-    });
+    const updateData: Partial<CartItem> = {};
 
+    if (typeof updateCartItemDto.quantity !== 'undefined') {
+      updateData.quantity = updateCartItemDto.quantity;
+    }
+
+    if (updateCartItemDto.customization_data) {
+      updateData.customization_data = updateCartItemDto.customization_data;
+    }
+
+    await this.cartItemRepository.update(itemId, updateData);
     return this.getOrCreateCart(userId);
   }
 

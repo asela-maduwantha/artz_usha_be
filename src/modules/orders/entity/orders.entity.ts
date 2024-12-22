@@ -39,7 +39,6 @@ export class Orders{
     @OneToOne(()=>Payments, (payment)=> payment.order)
     payment: Payments;
 
-    @OneToMany(()=>OrderItem, (orderItem)=> orderItem.product_id)
+    @OneToMany(() => OrderItem, (orderItem) => orderItem.order_id)
     order_items: OrderItem[];
-    
 }

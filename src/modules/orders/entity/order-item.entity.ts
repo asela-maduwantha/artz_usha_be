@@ -8,14 +8,15 @@ export class OrderItem {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Orders, (orders) => orders.id)
-    order_id: Orders;
+    @ManyToOne(() => Product)
+    product: Product;
 
-    @ManyToOne(() => Product, (product) => product.id)
-    product_id: Product;
 
     @Column()
     quantity: number;
+
+    @ManyToOne(() => Orders, (orders) => orders.order_items)
+    order_id: Orders;       
 
     @OneToMany(() => OrderItemCustomization, (customization) => customization.order_item)
     customizations: OrderItemCustomization[];

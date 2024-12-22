@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Cart } from './cart.entity';
 import { Product } from '../../products/entities/product.entity';
+import { CustomizationData } from '../interfaces/customization.interface';
 
 @Entity()
 export class CartItem {
@@ -18,5 +19,5 @@ export class CartItem {
   quantity: number;
 
   @Column('json')
-  customization_data: Record<string, any>;
+  customization_data: CustomizationData;
 }

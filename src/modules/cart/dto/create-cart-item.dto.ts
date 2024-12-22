@@ -1,5 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsObject, Min } from 'class-validator';
+import { IsNumber, IsObject, Min, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CustomizationData, CustomizationValue } from '../interfaces/customization.interface';
+
+class CustomizationValueDto implements CustomizationValue {
+  @ApiProperty({ description: 'Unique identifier for the customization option' })
+  id: string;
+
+  @ApiProperty({ description: 'Selected value for the customization option' })
+  value: any;
+}
 
 export class CreateCartItemDto {
   @ApiProperty({ description: 'Product ID' })
@@ -13,8 +23,13 @@ export class CreateCartItemDto {
 
   @ApiProperty({
     description: 'Customization options for the product',
-    example: { 'size': 'large', 'color': 'red' }
+    example: {
+      size: { id: '123', value: 'large' },
+      color: { id: '456', value: 'red' }
+    }
   })
   @IsObject()
-  customization_data: Record<string, any>;
+  @ValidateNested()
+  @Type(() => CustomizationValueDto)
+  customization_data: CustomizationData;
 }
