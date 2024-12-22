@@ -14,13 +14,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(signupDto: SignupDto): Promise<User> {
-    const { email, password, firstName, lastName } = signupDto;
+  async signup(signupDto: SignupDto): Promise<{ access_token: string; user: Partial<User> }> {
+    const { email, password, firstName, lastName, phoneNumber, address } = signupDto;
     
     // Check if user already exists
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
-      throw new UnauthorizedException('User already exists');
+        throw new UnauthorizedException('User already exists');
     }
 
     // Hash password
@@ -29,15 +29,36 @@ export class AuthService {
 
     // Create user
     const user = await this.usersService.create({
-      email,
-      password: hashedPassword,
-      firstName,
-      lastName,
-      role: Role.BUYER, // Default role
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName,
+        phoneNumber,
+        address,
+        role: Role.BUYER,
     });
 
-    return user;
-  }
+    // Generate JWT token
+    const payload = {
+        sub: user.id,
+        email: user.email,
+        role: user.role
+    };
+
+    // Return token and user data (excluding sensitive information)
+    return {
+        access_token: await this.jwtService.signAsync(payload),
+        user: {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
+            address: user.address,
+            role: user.role
+        }
+    };
+}
 
   async signin(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);

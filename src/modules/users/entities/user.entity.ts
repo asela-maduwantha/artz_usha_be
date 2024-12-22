@@ -4,9 +4,9 @@ import { Payments } from "src/modules/payments/entities/payments.entity";
 import { Orders } from "src/modules/orders/entity/orders.entity";
 
 @Entity()
-export class User{
+export class User {
     @PrimaryGeneratedColumn()
-    id : number;
+    id: number;
 
     @Column()
     firstName: string;
@@ -20,19 +20,25 @@ export class User{
     @Column()
     password: string;
 
+    @Column({ nullable: true })
+    phoneNumber: string;
+
+    @Column({ nullable: true })
+    address: string;
+
     @Column({
         type: 'enum',
         enum: Role,
         default: Role.BUYER
-      })
-    role: Role
+    })
+    role: Role;
 
-    @OneToMany(()=> Payments, (payment)=>payment.user)
+    @OneToMany(() => Payments, (payment) => payment.user)
     payments: Payments[];
 
-    @OneToMany(()=> Orders, (orders)=>orders.user)
+    @OneToMany(() => Orders, (orders) => orders.user)
     orders: Orders[];
 
-    @CreateDateColumn ()
-    created_at: Date
+    @CreateDateColumn()
+    created_at: Date;
 }
