@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { PaymentStatus } from './enums/payment-status.enum';
 import { OrderStatus } from '../orders/enums/order-status.enum';
 import { UsersService } from '../users/users.service';
+import { MonthlyRevenue } from './interfaces/monthly-revenue.interface';
 
 @Injectable()
 export class PaymentsService {
@@ -151,4 +152,43 @@ export class PaymentsService {
 
     return payment;
   }
+
+  async getMonthlyRevenue(year?: number): Promise<MonthlyRevenue[]> {
+    const currentYear = year || new Date().getFullYear();
+
+    const revenue = await this.paymentRepository
+        .createQueryBuilder('payment')
+        .select([
+            `DATE_FORMAT(payment.payment_date, '%Y-%m') as month`,
+            'SUM(payment.amount) as revenue',
+            'COUNT(DISTINCT payment.id) as total_orders',
+            'ROUND(AVG(payment.amount), 2) as average_order_value'
+        ])
+        .where('YEAR(payment.payment_date) = :year', { year: currentYear })
+        .andWhere('payment.status = :status', { status: PaymentStatus.COMPLETED })
+        .groupBy('month')
+        .orderBy('month', 'ASC')
+        .getRawMany();
+
+    // Format data for frontend charting
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Ensure all months are included with 0 values if no data
+    const formattedRevenue = monthNames.map((month, index) => {
+        const monthData = revenue.find(r => {
+            const monthNumber = parseInt(r.month.split('-')[1]) - 1;
+            return monthNumber === index;
+        });
+
+        return {
+            month,
+            revenue: monthData ? parseFloat(monthData.revenue) : 0,
+            total_orders: monthData ? parseInt(monthData.total_orders) : 0,
+            average_order_value: monthData ? parseFloat(monthData.average_order_value) : 0
+        };
+    });
+
+    return formattedRevenue;
+}
 }

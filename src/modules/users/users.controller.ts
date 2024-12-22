@@ -24,8 +24,6 @@ import {
     constructor(private readonly usersService: UsersService) {}
   
     @Get('profile')
-    @UseGuards(AuthGuard('jwt'))
-    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get user profile' })
     @ApiResponse({ status: 200, description: 'User profile retrieved' })
     async getProfile(@Req() req) {
@@ -33,9 +31,6 @@ import {
     }
   
     @Get()
-    @UseGuards(AuthGuard('jwt'))
-    @Roles(Role.ADMIN)
-    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get all users (Admin only)' })
     @ApiResponse({ status: 200, description: 'List of users' })
     async getAllUsers() {

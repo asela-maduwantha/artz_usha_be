@@ -7,6 +7,7 @@ import { ProductFeature } from './entities/product-feature.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CustomizationOption } from './entities/customization-option.entity';
+import { CategoryStats } from './interfaces/category-stats.interface';
 
 @Injectable()
 export class ProductsService {
@@ -159,4 +160,40 @@ export class ProductsService {
     // Then delete the product
     await this.productRepository.remove(product);
   }
+
+  async getCategoryStats(): Promise<CategoryStats[]> {
+    const stats = await this.productRepository
+        .createQueryBuilder('product')
+        .select([
+            'product.category as category',
+            'COUNT(product.id) as product_count',
+            'SUM(product.price) as total_value',
+            'ROUND(AVG(product.price), 2) as average_price'
+        ])
+        .where('product.is_active = :isActive', { isActive: true })
+        .groupBy('product.category')
+        .orderBy('product_count', 'DESC')
+        .getRawMany();
+
+    // Calculate overall totals
+    const totalStats = await this.productRepository
+        .createQueryBuilder('product')
+        .select([
+            '"All Categories" as category',
+            'COUNT(product.id) as product_count',
+            'SUM(product.price) as total_value',
+            'ROUND(AVG(product.price), 2) as average_price'
+        ])
+        .where('product.is_active = :isActive', { isActive: true })
+        .getRawOne();
+
+    // Combine category-wise stats with total stats
+    return [totalStats, ...stats].map(stat => ({
+        category: stat.category,
+        product_count: parseInt(stat.product_count),
+        total_value: parseFloat(stat.total_value),
+        average_price: parseFloat(stat.average_price)
+    }));
+}
+
 }

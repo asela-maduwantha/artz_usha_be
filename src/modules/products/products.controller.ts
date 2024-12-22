@@ -16,6 +16,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import { CategoryStats } from './interfaces/category-stats.interface';
 
 @ApiTags('Products')
 @Controller('products')
@@ -59,6 +60,28 @@ export class ProductsController {
   @ApiResponse({ status: 200, description: 'Product deleted successfully' })
   remove(@Param('id') id: string): Promise<void> {
     return this.productsService.remove(+id);
+  }
+
+  @Get('analytics/category-stats')
+  @ApiOperation({ summary: 'Get product statistics by category' })
+  @ApiResponse({
+      status: 200,
+      description: 'Product statistics grouped by category',
+      schema: {
+          type: 'array',
+          items: {
+              type: 'object',
+              properties: {
+                  category: { type: 'string' },
+                  product_count: { type: 'number' },
+                  total_value: { type: 'number' },
+                  average_price: { type: 'number' }
+              }
+          }
+      }
+  })
+  async getCategoryStats(): Promise<CategoryStats[]> {
+      return this.productsService.getCategoryStats();
   }
 }
 

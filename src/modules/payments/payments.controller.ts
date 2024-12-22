@@ -6,7 +6,8 @@ import {
     Get, 
     Param, 
     UseGuards,
-    ParseIntPipe 
+    ParseIntPipe, 
+    Query
   } from '@nestjs/common';
   import { 
     ApiTags, 
@@ -18,6 +19,7 @@ import {
   import { CreatePaymentIntentDto } from './dto/create-payment-intent.dto';
   import { CompletePaymentDto } from './dto/complete-payment.dto';
   import { RefundPaymentDto } from './dto/refund-payment.dto';
+import { MonthlyRevenue } from './interfaces/monthly-revenue.interface';
 
   
   @ApiTags('Payments')
@@ -74,5 +76,27 @@ import {
     })
     findById(@Param('id', ParseIntPipe) id: number) {
       return this.paymentService.findById(id);
+    }
+
+    @Get('analytics/monthly-revenue')
+    @ApiOperation({ summary: 'Get monthly revenue data for charting' })
+    @ApiResponse({
+        status: 200,
+        description: 'Monthly revenue data with related metrics',
+        schema: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    month: { type: 'string' },
+                    revenue: { type: 'number' },
+                    total_orders: { type: 'number' },
+                    average_order_value: { type: 'number' }
+                }
+            }
+        }
+    })
+    async getMonthlyRevenue(@Query('year') year?: number): Promise<MonthlyRevenue[]> {
+        return this.paymentService.getMonthlyRevenue(year);
     }
   }

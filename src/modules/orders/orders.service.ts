@@ -10,6 +10,9 @@ import { User } from 'src/modules/users/entities/user.entity';
 import { Product } from 'src/modules/products/entities/product.entity';
 import { Discounts } from 'src/modules/discounts/entity/discounts.entity';
 import { CustomizationOption } from 'src/modules/products/entities/customization-option.entity';
+import { MostOrderedProduct } from './interfaces/most-ordered-product.interface';
+
+
 
 @Injectable()
 export class OrdersService {
@@ -177,5 +180,23 @@ export class OrdersService {
     }
   }
 
+ 
+  async getMostOrderedProducts(): Promise<MostOrderedProduct[]> {
+    return this.orderItemRepository
+        .createQueryBuilder('orderItem')
+        .select([
+            'product.id as product_id',
+            'product.name as product_name',
+            'COUNT(DISTINCT orderItem.order_id) as total_orders',
+            'SUM(orderItem.quantity) as total_quantity',
+            'SUM(orderItem.quantity * product.price) as total_revenue'
+        ])
+        .leftJoin('orderItem.product', 'product')
+        .leftJoin('orderItem.order_id', 'order')
+        .where('order.status = :status', { status: OrderStatus.DELIVERED })
+        .groupBy('product.id')
+        .orderBy('total_quantity', 'DESC')
+        .getRawMany();
+}
   
 }

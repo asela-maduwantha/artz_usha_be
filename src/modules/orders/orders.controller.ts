@@ -111,4 +111,29 @@ import {
     async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
       return this.ordersService.remove(id);
     }
+
+
+    @Get('analytics/most-ordered')
+    @ApiOperation({ summary: 'Get most ordered products analytics' })
+    @ApiResponse({
+        status: 200,
+        description: 'List of most ordered products with analytics',
+        schema: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    product_id: { type: 'number' },
+                    product_name: { type: 'string' },
+                    total_orders: { type: 'number' },
+                    total_quantity: { type: 'number' },
+                    total_revenue: { type: 'number' }
+                }
+            }
+        }
+    })
+    async getMostOrderedProducts() {
+        return this.ordersService.getMostOrderedProducts();
+    }
+    
   }
